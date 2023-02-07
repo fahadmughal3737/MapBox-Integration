@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
 
   dataBox: {
     height: 65,
-    width: 130,
     backgroundColor: '#ffffff',
     borderRadius: 5,
     elevation: 5,
