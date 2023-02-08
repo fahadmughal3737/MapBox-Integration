@@ -35,8 +35,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     marginVertical: '5%',
   },
-  subHeading: {fontSize: 16, fontWeight: 'bold', color: 'black'},
-  basicText: {fontSize: 16, color: 'black'},
+  subHeading: {fontSize: 12, fontWeight: 'bold', color: 'black'},
+  basicText: {fontSize: 12, color: 'black'},
   toolTip: {
     marginBottom: 20,
     marginLeft: -6,

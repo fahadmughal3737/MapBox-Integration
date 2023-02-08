@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {View, Text, ActivityIndicator, ScrollView} from 'react-native';
 import {styles} from './style';
 import {BarChart} from 'react-native-gifted-charts';
@@ -9,64 +9,61 @@ import {
 } from 'react-native-responsive-screen';
 import {useOrientation} from '../../components/deviceorientation/orientation';
 import lookup from 'country-code-lookup';
+// import {LabelRender} from '../../components/labels/labelRender';
+import LabelRender from '../../components/labels/labelRender';
 export const PretoChart = () => {
-  const [load, setLoad] = useState(true);
+  const [load, setLoad] = useState(false);
   const [barData, setBarData] = useState<any>([]);
   const orientation = useOrientation();
   const sortData = dataSet.sort(function (a, b) {
-    return +a['Internet Users'] - +b['Internet Users'];
+    return +b['Internet Users'] - +a['Internet Users'];
   });
   useEffect(() => {
-    dataSet.map((data: any, index: number) => {
-      let _country = lookup.byCountry(data['Country or Area']);
-      let _obj = {
-        value: parseInt(data['Internet Users']),
-        label: LabelRender(
-          _country === undefined || _country === null ? 'NUL' : _country?.iso3,
-        ),
-        leftShiftForTooltip: index > 15 ? 15 : 0,
-        dataObj: data,
-      };
-      barData.push(_obj);
-    });
-
-    if (barData.length > 0) {
-      setLoad(false);
-    }
-  }, []);
-  const LabelRender = (text: string) => {
-    let _renderArr = [];
-    _renderArr.push(text?.substring(0, 1));
-    _renderArr.push(text?.substring(1, 2));
-    _renderArr.push(text?.substring(2, 3));
-    return (
-      <View
-        style={{
-          width: widthPercentageToDP('1.9'),
-          alignItems: 'flex-end',
-        }}>
-        <View style={styles.labelMargin}>
-          {_renderArr.map((data: string, index: number) => {
-            return (
-              <Text
-                numberOfLines={1}
-                adjustsFontSizeToFit={true}
-                style={styles.barLabel}>
-                {data}
-              </Text>
-            );
-          })}
-        </View>
-      </View>
+    setBarData(
+      dataSet.slice(0, 3).map((data: any, index: number) => {
+        let _country = lookup.byCountry(data['Country or Area']);
+        return {
+          value: +data['Internet Users'],
+          label: _country?.iso3,
+          labelTextStyle: {
+            fontSize: 2,
+          },
+          leftShiftForTooltip: index > 15 ? 15 : 0,
+          dataObj: data,
+        };
+      }),
     );
-  };
+  }, []);
+  // const LabelRender = (text: string) => {
+  //   let _renderArr = [...text];
+  //   return (
+  //     <View
+  //       style={{
+  //         width: widthPercentageToDP('1.9'),
+  //         alignItems: 'flex-end',
+  //       }}>
+  //       <View style={styles.labelMargin}>
+  //         {_renderArr.map((data: string) => {
+  //           return (
+  //             <Text
+  //               numberOfLines={1}
+  //               adjustsFontSizeToFit={true}
+  //               style={styles.barLabel}>
+  //               {data}
+  //             </Text>
+  //           );
+  //         })}
+  //       </View>
+  //     </View>
+  //   );
+  // };
   return (
     <ScrollView style={styles.container}>
       <View style={styles.topNavContainer}>
         <View style={styles.topSeparator}>
           <Text style={styles.mainHeading}>Internet Users WorldWide</Text>
           <View style={styles.topThree}>
-            {sortData.slice(0, 3).map((data: any, index: number) => {
+            {sortData.slice(0, 3).map((data: any) => {
               return (
                 <View
                   style={{
@@ -84,7 +81,6 @@ export const PretoChart = () => {
                   <Text style={styles.basicText}>
                     {data['Internet Users'] + ' Users'}
                   </Text>
-                  <Text style={styles.basicText}>{data['Percentage']}</Text>
                 </View>
               );
             })}
@@ -93,7 +89,10 @@ export const PretoChart = () => {
       </View>
       <View
         style={{
-          height: heightPercentageToDP('50'),
+          height:
+            orientation === 'PORTRAIT'
+              ? heightPercentageToDP('50')
+              : widthPercentageToDP('95'),
           justifyContent: 'space-around',
         }}>
         {load ? (
@@ -106,23 +105,27 @@ export const PretoChart = () => {
               height:
                 orientation === 'PORTRAIT'
                   ? heightPercentageToDP('40')
-                  : widthPercentageToDP('60'),
+                  : widthPercentageToDP('90'),
               justifyContent: 'center',
             }}>
             <BarChart
-              onPress={(item: any, index: any) => {}}
               leftShiftForLastIndexTooltip={55}
-              renderTooltip={(item: any, index: any) => {
+              renderTooltip={(item: any) => {
                 return (
                   <View style={styles.toolTip}>
                     <Text>{item.value}</Text>
                   </View>
                 );
               }}
+              xAxisLabelTextStyle={{
+                transformY: 50,
+                fontSize: 24,
+              }}
+              labelsExtraHeight={60}
               spacing={3}
               initialSpacing={7}
               frontColor={'#177AD5'}
-              barWidth={8}
+              // barWidth={8}
               data={barData}
               width={
                 orientation === 'PORTRAIT'
@@ -136,9 +139,6 @@ export const PretoChart = () => {
                   : widthPercentageToDP('35')
               }
               noOfSections={5}
-              xAxisLabelTextStyle={{}}
-              yAxisLabelSuffix="k"
-              xAxisIndicesWidth={200}
             />
           </View>
         )}
