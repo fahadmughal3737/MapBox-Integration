@@ -10,4 +10,39 @@ export const styles = StyleSheet.create({
     elevation: 5,
     padding: '2%',
   },
+  barLabel: {
+    color: 'black',
+    fontWeight: '400',
+    fontSize: 6,
+  },
+  labelMargin: {marginTop: 15, top: 10},
+  topNavContainer: {
+    height: '35%',
+  },
+  topSeparator: {
+    justifyContent: 'space-evenly',
+    flex: 1,
+  },
+  mainHeading: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+  },
+  topThree: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginVertical: '5%',
+  },
+  subHeading: {fontSize: 16, fontWeight: 'bold', color: 'black'},
+  basicText: {fontSize: 16, color: 'black'},
+  toolTip: {
+    marginBottom: 20,
+    marginLeft: -6,
+    backgroundColor: '#ffcefe',
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
 });
