@@ -1,7 +1,8 @@
 import {useEffect, useState} from 'react';
 import {View, Text, ActivityIndicator, ScrollView} from 'react-native';
 import {styles} from './style';
-import {BarChart} from 'react-native-gifted-charts';
+// import {BarChart} from 'react-native-gifted-charts';
+import {BarChart} from 'react-native-chart-kit';
 import {dataSet} from '../../services/dataset/dataset';
 import {
   heightPercentageToDP,
@@ -11,6 +12,10 @@ import {useOrientation} from '../../components/deviceorientation/orientation';
 import lookup from 'country-code-lookup';
 // import {LabelRender} from '../../components/labels/labelRender';
 import LabelRender from '../../components/labels/labelRender';
+import {Dimensions} from 'react-native';
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
+
 export const PretoChart = () => {
   const [load, setLoad] = useState(false);
   const [barData, setBarData] = useState<any>([]);
@@ -34,6 +39,65 @@ export const PretoChart = () => {
       }),
     );
   }, []);
+  const chartConfig = {
+    backgroundGradientFrom: '#000000',
+    backgroundGradientFromOpacity: 1,
+    backgroundGradientTo: '#000000',
+    backgroundGradientToOpacity: 1,
+    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    strokeWidth: 5, // optional, default 3
+    barPercentage: 0.1,
+    useShadowColorFromDataset: false, // optional
+  };
+  const data = {
+    labels: [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+    ],
+    datasets: [
+      {
+        data: [
+          20, 45, 28, 80, 99, 43, 20, 45, 28, 80, 99, 43, 20, 45, 28, 80, 99,
+          43, 20, 45, 28, 80, 99, 43, 20, 45, 28, 80, 99, 43, 20, 45, 28, 80,
+          99, 43,
+        ],
+      },
+    ],
+  };
   // const LabelRender = (text: string) => {
   //   let _renderArr = [...text];
   //   return (
@@ -108,7 +172,7 @@ export const PretoChart = () => {
                   : widthPercentageToDP('90'),
               justifyContent: 'center',
             }}>
-            <BarChart
+            {/* <BarChart
               leftShiftForLastIndexTooltip={55}
               renderTooltip={(item: any) => {
                 return (
@@ -139,6 +203,16 @@ export const PretoChart = () => {
                   : widthPercentageToDP('35')
               }
               noOfSections={5}
+            /> */}
+            <BarChart
+              style={{}}
+              data={data}
+              width={screenWidth}
+              height={400}
+              yAxisLabel="$"
+              yAxisSuffix="a"
+              chartConfig={chartConfig}
+              verticalLabelRotation={90}
             />
           </View>
         )}
