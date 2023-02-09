@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {PretoChart} from './src/screens/map/PretoChart';
+import {Chart} from './src/screens/map/Chart';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -9,8 +9,8 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="PretoChart"
-          component={PretoChart}
+          name="ChartChart"
+          component={Chart}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
