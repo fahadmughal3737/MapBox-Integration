@@ -1,5 +1,11 @@
 import {useState} from 'react';
-import {View, Text, ActivityIndicator, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {styles} from './style';
 import {BarChart, LineChart} from 'react-native-chart-kit';
 import {dataSet} from '../../services/dataset/dataset';
@@ -23,23 +29,23 @@ export const Chart = () => {
   });
   const Regions: any = {};
   dataSet.forEach(x => {
-    const region = lookup.byCountry(x['Country or Area'])?.region;
+    const region = lookup.byCountry(x['Country or Area'])?.iso3;
     if (!region) return;
     if (region in Regions) {
       Regions[region] += x['Internet Users'];
     }
     Regions[region] = x['Internet Users'];
   });
-  const calcucateBarOercentage = () => {
+  const calculateBarPercentage = () => {
     return orientation === 'PORTRAIT'
-      ? Object.keys(Regions).length / screenHeight
-      : Object.keys(Regions).length / screenWidth;
+      ? Object.keys(Regions).length / screenHeight + 0.05
+      : Object.keys(Regions).length / screenWidth + 0.4;
   };
-
+  console.log('Regionsss', Regions);
   const chartConfig = {
-    backgroundGradientFrom: '#ffffff',
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: '#ffffff',
+    backgroundGradientFrom: '#f0f2f7',
+    backgroundGradientFromOpacity: 0.5,
+    backgroundGradientTo: '#f0f2f7',
     backgroundGradientToOpacity: 0.5,
     color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
     useShadowColorFromDataset: false,
@@ -47,18 +53,41 @@ export const Chart = () => {
     fillShadowGradientTo: '#28aac8',
     fillShadowGradientFromOpacity: 1,
     fillShadowGradientToOpacity: 1,
-    barPercentage: +calcucateBarOercentage(),
+    barPercentage: +calculateBarPercentage(),
     decimalPlaces: 0,
-    // formatXLabel: (xLabel: string) => {
-    //   return <StyledView className="p-1 font-semibold">{xLabel}</StyledView>;
-    // },
+    formatXLabel: (xLabel: string) => {
+      console.log('xLABELLL', xLabel);
+      return xLabel;
+    },
+    formatYLabel: (yLabel: string) => {
+      const Label = nFormatter(parseInt(yLabel));
+      return Label === undefined ? '0' : Label;
+    },
   };
+  const nFormatter = (num: number) => {
+    if (num >= 1000000000) {
+      return `${
+        (num / 1000000000).toFixed(2).replace(/\.0$/, '').split('.')[0]
+      } B`;
+    }
 
+    if (num >= 1000000) {
+      return `${
+        (num / 1000000).toFixed(2).replace(/\.0$/, '').split('.')[0]
+      } M`;
+    }
+    if (num >= 1000) {
+      return `${(num / 1000).toFixed(2).replace(/\.0$/, '').split('.')[0]} K`;
+    }
+  };
+  console.log('object.keys(regions)', Object.keys(Regions));
   const data = {
-    labels: Object.keys(Regions),
+    labels: Object.keys(Regions).splice(orientation === 'PORTRAIT' ? 20 : 10),
     datasets: [
       {
-        data: Object.values(Regions),
+        data: Object.values(Regions).splice(
+          orientation === 'PORTRAIT' ? 20 : 10,
+        ),
       },
     ],
   };
@@ -125,22 +154,18 @@ export const Chart = () => {
                   ? heightPercentageToDP('65')
                   : widthPercentageToDP('150')
               }
-              // yAxisLabel=""
-              // yAxisSuffix=""
+              renderBars={(obj: any) => {
+                console.log(obj);
+              }}
               chartConfig={chartConfig}
               verticalLabelRotation={90}
               withInnerLines={true}
               withCustomBarColorFromData={false}
               fromZero={true}
-              showBarTops={false}
+              showBarTops={true}
               onDataPointClick={({value, dataset, getColor}: any) =>
                 console.log('test:', value)
               }
-              bezier
-              // propsForLabels={{
-              //   fontSize: 5,
-              // }}
-              // xAxisLabel=""
             />
           </View>
         )}
