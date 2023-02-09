@@ -24,6 +24,7 @@ const StyledText = styled(Text);
 export const Chart = () => {
   const [load, setLoad] = useState(false);
   const orientation = useOrientation();
+  console.log('dataset', dataSet.length);
   const sortData = dataSet.sort(function (a, b) {
     return +b['Internet Users'] - +a['Internet Users'];
   });
@@ -36,10 +37,12 @@ export const Chart = () => {
     }
     Regions[region] = x['Internet Users'];
   });
+  console.log('asdsa', Object.keys(Regions).length);
+
   const calculateBarPercentage = () => {
     return orientation === 'PORTRAIT'
-      ? Object.keys(Regions).length / screenHeight + 0.05
-      : Object.keys(Regions).length / screenWidth + 0.4;
+      ? Object.keys(Regions).length / screenHeight + 0.35
+      : Object.keys(Regions).length / screenWidth + 0.7;
   };
   console.log('Regionsss', Regions);
   const chartConfig = {
@@ -56,7 +59,6 @@ export const Chart = () => {
     barPercentage: +calculateBarPercentage(),
     decimalPlaces: 0,
     formatXLabel: (xLabel: string) => {
-      console.log('xLABELLL', xLabel);
       return xLabel;
     },
     formatYLabel: (yLabel: string) => {
@@ -81,12 +83,33 @@ export const Chart = () => {
     }
   };
   console.log('object.keys(regions)', Object.keys(Regions));
+  console.log('first cal test', screenWidth / Object.keys(Regions).length);
+  console.log('normalLL test', Object.values(Regions).length);
+  console.log(
+    'spliceee test',
+    Object.values(Regions).splice(
+      screenWidth / Object.values(Regions).length -
+        Object.values(Regions).splice(
+          screenWidth / Object.values(Regions).length,
+        ).length,
+    ).length,
+  );
   const data = {
-    labels: Object.keys(Regions).splice(orientation === 'PORTRAIT' ? 20 : 10),
+    labels: Object.keys(Regions).splice(
+      screenWidth / Object.keys(Regions).length -
+        Object.keys(Regions).splice(screenWidth / Object.keys(Regions).length)
+          .length,
+    ),
     datasets: [
       {
+        // data: Object.values(Regions).splice(
+        //   orientation === 'PORTRAIT' ? 20 : 10,
+        // ),
         data: Object.values(Regions).splice(
-          orientation === 'PORTRAIT' ? 20 : 10,
+          screenWidth / Object.values(Regions).length -
+            Object.values(Regions).splice(
+              screenWidth / Object.values(Regions).length,
+            ).length,
         ),
       },
     ],
