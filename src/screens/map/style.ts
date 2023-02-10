@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
   },
   labelMargin: {marginTop: 15, top: 10},
   topNavContainer: {
-    height: '35%',
+    height: '25%',
   },
   topSeparator: {
     justifyContent: 'space-evenly',
