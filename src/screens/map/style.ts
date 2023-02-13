@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
-  container: {flex: 1, padding: '5%', backgroundColor: '#f0f2f7'},
+  container: {flex: 1, backgroundColor: '#f0f2f7'},
 
   dataBox: {
     height: 65,
@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
   },
   labelMargin: {marginTop: 15, top: 10},
   topNavContainer: {
-    height: '25%',
+    flex: 0.2,
   },
   topSeparator: {
     justifyContent: 'space-evenly',
